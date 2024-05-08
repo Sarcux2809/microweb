@@ -4,17 +4,16 @@ import { datoService } from './app.service';
 import * as path from 'path';
 import * as Redis from 'redis';
 
+// Crea una instancia de cliente Redis una vez para toda la aplicación
+const redisClient = Redis.createClient();
+
 @Controller()
 export class AppController {
+  getHello: any;
   constructor(private readonly appService: AppService) {}
 
   @Post()
-  newUser(@Body() body: any): string {
-    // Aquí puedes procesar los datos recibidos como desees
-    // Por ejemplo, puedes guardarlos en Redis
-    const redisClient = Redis.createClient();
-    redisClient.set('nombre_de_la_clave', JSON.stringify(body));
-    redisClient.quit(); // Cierra la conexión con Redis
+  async newUser(@Body() body: any): Promise<string> {
     return this.appService.newUser(body);
   }
 
